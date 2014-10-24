@@ -29,15 +29,19 @@ end
 
 # Erase all variables set by chruby and revert PATH.
 function chruby_reset
-  set -e RUBY_ROOT
-
-  if test -n "$OLD_PATH"
-    set -xg PATH $OLD_PATH
+  # Remove all PATH additions.
+  if test -n "$RUBY_ROOT"
+    set -xg PATH (
+      printf "%s\n" $PATH |\
+      grep -Fxv $RUBY_ROOT/bin |\
+      grep -Fxv $GEM_ROOT/bin |\
+      grep -Fxv $GEM_HOME/bin
+    )
   end
 
+  set -e RUBY_ROOT
   set -e RUBY_ENGINE
   set -e RUBY_VERSION
-
   set -e GEM_HOME
 end
 
@@ -46,7 +50,6 @@ end
 # Also set RUBY_ROOT, RUBY_ENGINE, RUBY_VERSION for your own use.
 function chruby_use
   set -g RUBY_ROOT $argv
-  set -g OLD_PATH $PATH
   set -xg PATH $RUBY_ROOT/bin $PATH
 
   # Get info from ruby.
@@ -55,7 +58,7 @@ function chruby_use
 
   set -g RUBY_ENGINE $ruby_vars[1]
   set -g RUBY_VERSION $ruby_vars[2]
-  set -l GEM_ROOT $ruby_vars[3]
+  set -g GEM_ROOT $ruby_vars[3]
 
   set -xg GEM_HOME $HOME/.gem/$RUBY_ENGINE/$RUBY_VERSION
 
