@@ -61,7 +61,7 @@ function chruby_use
   set -xg PATH $RUBY_ROOT/bin $PATH
 
   # Get info from ruby.
-  set -l ruby_code "puts RUBY_ENGINE, RbConfig::CONFIG['ruby_version'], Gem.default_dir"
+  set -l ruby_code "puts RUBY_ENGINE, RUBY_VERSION, Gem.default_dir"
   set -l ruby_vars (ruby -e $ruby_code)
 
   set -g RUBY_ENGINE $ruby_vars[1]
