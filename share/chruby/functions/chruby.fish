@@ -1,6 +1,4 @@
 function chruby
-  set rubies ~/.rubies
-
   switch "$argv"
   case ''
     ls $rubies
@@ -10,14 +8,9 @@ function chruby
     chruby_reset
   case '*'
     set -l name $argv[1]
+    set -l dir (chruby_find $name; or chruby_find ruby-$name)
 
-    # Expand 2.0.0 to ruby-2.0.0
-    set -l dir $rubies/ruby-$name
-    if test ! -d $dir
-      set -l dir $rubies/$name
-    end
-
-    if test ! -d $dir
+    if test ! -n "$dir"
       echo "chruby: unknown Ruby: $name"
       return 1
     end
@@ -25,6 +18,21 @@ function chruby
     chruby_reset
     chruby_use $dir
   end
+end
+
+function chruby_find
+  set -l rubies $RUBIES
+  if test ! -n "$rubies"
+    set rubies (ls -d $HOME/.rubies/* /opt/rubies/*)
+  end
+
+  for ruby in $rubies
+    if test (basename $ruby) = $argv[1]
+      echo $ruby
+      return 0
+    end
+  end
+  return 1
 end
 
 # Erase all variables set by chruby and revert PATH.
