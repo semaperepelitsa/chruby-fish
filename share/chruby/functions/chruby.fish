@@ -23,7 +23,7 @@ end
 function chruby_find
   set -l rubies $RUBIES
   if test ! -n "$rubies"
-    set rubies (ls -d $HOME/.rubies/* /opt/rubies/*)
+    set rubies $HOME/.rubies/* /opt/rubies/*
   end
 
   for ruby in $rubies
