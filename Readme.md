@@ -20,3 +20,4 @@ Usage:
 See also:
 
 - [ruby-install](https://github.com/postmodern/ruby-install)
+- [chruby](https://github.com/postmodern/chruby) - original implementation for bash/zsh
