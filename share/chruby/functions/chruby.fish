@@ -49,6 +49,7 @@ function chruby_reset
 
   set -e RUBY_ROOT
   set -e RUBY_ENGINE
+  set -e GEM_ROOT
   set -e GEM_HOME
 end
 
@@ -65,7 +66,7 @@ function chruby_use
 
   set -g RUBY_ENGINE $ruby_vars[1]
   set -l RUBY_VERSION $ruby_vars[2]
-  set -l GEM_ROOT $ruby_vars[3]
+  set -g GEM_ROOT $ruby_vars[3]
 
   set -xg GEM_HOME $HOME/.gem/$RUBY_ENGINE/$RUBY_VERSION
 
